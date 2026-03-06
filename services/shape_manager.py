@@ -1,6 +1,12 @@
 """Shape manager for CRUD operations"""
 
 from typing import Dict, List, Optional
+import os
+import sys
+
+# Add parent directory to path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
 from models.shape import Shape
 from models.point import Point
 from models.line import Line
