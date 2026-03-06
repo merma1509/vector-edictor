@@ -1,5 +1,4 @@
 # Vector Editor Requirements
-# Core dependencies (none - we use Python standard library)
 
 # Development dependencies
 black>=23.0.0          # Code formatting
@@ -8,6 +7,4 @@ mypy>=1.0.0            # Type checking
 pytest>=7.0.0          # Testing framework
 pytest-cov>=4.0.0      # Coverage reporting
 flake8>=6.0.0          # Linting
-
-# Note: This project uses only Python standard library modules
-# No external dependencies required for basic functionality
+jsonschema>=4.0.0      # JSON schema validation

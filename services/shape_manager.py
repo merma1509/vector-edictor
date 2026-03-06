@@ -1,6 +1,6 @@
 """Shape manager for CRUD operations"""
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 import os
 import sys
 
@@ -12,14 +12,17 @@ from models.point import Point
 from models.line import Line
 from models.circle import Circle
 from models.square import Square
+from .file_manager import FileManager
 
 
 class ShapeManager:
     """Manages creation, deletion, and listing of shapes"""
     
     def __init__(self):
+        """Initialize the shape manager"""
         self.shapes: Dict[int, Shape] = {}
         self.next_id: int = 1
+        self.file_manager = FileManager()
     
     def create_point(self, x: float, y: float) -> Point:
         """Create a new point"""
@@ -68,3 +71,79 @@ class ShapeManager:
         """Clear all shapes"""
         self.shapes.clear()
         self.next_id = 1
+    
+    def save_shapes(self, filename: str) -> str:
+        """Save all current shapes to a file
+        
+        Args:
+            filename (string): Name of the file to save to
+            
+        Returns:
+            Success or error message
+        """
+        if not self.shapes:
+            return "No shapes to save"
+        
+        return self.file_manager.save_shapes(self.list_shapes(), filename)
+    
+    def load_shapes(self, filename: str) -> Tuple[bool, str]:
+        """Load shapes from a file
+        
+        Args:
+            filename (string): Name of the file to load from
+            
+        Returns:
+            Tuple of (success: bool, message: str)
+        """
+        success, message, shapes_data = self.file_manager.load_shapes(filename)
+        
+        if not success:
+            return False, message
+        
+        if not shapes_data:
+            return True, "No shapes found in file"
+        
+        # Clear current shapes before loading
+        self.clear_all()
+        
+        # Load shapes from data
+        loaded_count = 0
+        for shape_data in shapes_data:
+            try:
+                shape = self._create_shape_from_dict(shape_data)
+                if shape:
+                    self.shapes[shape.id] = shape
+                    loaded_count += 1
+                    # Update next_id to be higher than any loaded shape
+                    if shape.id >= self.next_id:
+                        self.next_id = shape.id + 1
+            except Exception as e:
+                # Skip invalid shapes but continue loading others
+                continue
+        
+        return True, f"Successfully loaded {loaded_count} shapes"
+    
+    def _create_shape_from_dict(self, shape_data: Dict) -> Optional[Shape]:
+        """Create a shape object from dictionary data
+        
+        Args:
+            shape_data (dict): Dictionary containing shape information
+            
+        Returns:
+            Shape object or None if creation failed
+        """
+        shape_type = shape_data.get('type', '').lower()
+        shape_id = shape_data.get('id', 0)
+        
+        if shape_type == 'point':
+            return Point(shape_id, shape_data['x'], shape_data['y'])
+        elif shape_type == 'line':
+            return Line(shape_id, shape_data['x1'], shape_data['y1'], 
+                       shape_data['x2'], shape_data['y2'])
+        elif shape_type == 'circle':
+            return Circle(shape_id, shape_data['center_x'], shape_data['center_y'], 
+                         shape_data['radius'])
+        elif shape_type == 'square':
+            return Square(shape_id, shape_data['x'], shape_data['y'], shape_data['side'])
+        
+        return None

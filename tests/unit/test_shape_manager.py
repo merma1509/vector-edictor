@@ -76,6 +76,60 @@ class TestShapeManagerEssential(unittest.TestCase):
         # Clear all and verify empty
         self.manager.clear_all()  # clear_all returns None
         self.assertEqual(len(self.manager.list_shapes()), 0)
+    
+    def test_save_shapes_to_file(self):
+        """Test saving shapes to a file"""
+        # Create some shapes
+        self.manager.create_point(10.0, 20.0)
+        self.manager.create_circle(0.0, 0.0, 5.0)
+        
+        # Save shapes
+        result = self.manager.save_shapes("test_save.json")
+        self.assertIn("Successfully saved", result)
+        self.assertIn("2 shapes", result)
+        
+        # Clean up
+        import os
+        if os.path.exists("test_save.json"):
+            os.remove("test_save.json")
+    
+    def test_save_empty_shapes(self):
+        """Test saving when no shapes exist"""
+        result = self.manager.save_shapes("empty.json")
+        self.assertEqual(result, "No shapes to save")
+    
+    def test_load_shapes_from_file(self):
+        """Test loading shapes from a file"""
+        # Create and save shapes first
+        self.manager.create_point(10.0, 20.0)
+        self.manager.create_circle(0.0, 0.0, 5.0)
+        
+        # Save to file
+        self.manager.save_shapes("test_load.json")
+        
+        # Clear current shapes
+        self.manager.clear_all()
+        self.assertEqual(len(self.manager.list_shapes()), 0)
+        
+        # Load shapes from file
+        success, message = self.manager.load_shapes("test_load.json")
+        self.assertTrue(success)
+        self.assertIn("Successfully loaded", message)
+        
+        # Verify shapes were loaded
+        shapes = self.manager.list_shapes()
+        self.assertEqual(len(shapes), 2)
+        
+        # Clean up
+        import os
+        if os.path.exists("test_load.json"):
+            os.remove("test_load.json")
+    
+    def test_load_nonexistent_file(self):
+        """Test loading from a non-existent file"""
+        success, message = self.manager.load_shapes("nonexistent.json")
+        self.assertFalse(success)
+        self.assertIn("File not found", message)
 
 
 if __name__ == "__main__":

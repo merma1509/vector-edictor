@@ -6,9 +6,7 @@ build-backend = "hatchling.build"
 name = "vector-editor"
 version = "1.0.0"
 description = "A simple CLI vector editor for creating and managing geometric shapes"
-authors = [
-    {name = "Мартин", email = "niyonmartin@yandex.ru"}
-]
+authors = [{name = "Мартин", email = "niyonmartin@yandex.ru"}]
 readme = "README.md"
 requires-python = ">=3.7"
 classifiers = [

@@ -1,14 +1,16 @@
 # Vector Editor CLI
 
-A simple command-line vector editor for creating and managing geometric shapes
+A simple command-line vector editor for creating and managing geometric shapes with file persistence.
 
 ## Features
 
 - **Create shapes**: Point, Line segment, Circle, Square
+- **File operations**: Save and load shapes to/from JSON files
 - **Delete shapes**: Remove shapes by ID
 - **List shapes**: View all created shapes
 - **Interactive mode**: User-friendly CLI interface
 - **Error handling**: Comprehensive input validation
+- **Zero runtime dependencies**: Uses only Python standard library
 
 ## Installation
 
@@ -30,7 +32,7 @@ curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
 2.**Clone and setup the project**:
-  
+
 ```bash
 git clone <repository-url>
 cd vector-editor
@@ -122,6 +124,42 @@ help
 exit
 ```
 
+### File Operations
+
+```bash
+# Save all shapes to a file
+save my_shapes.json
+
+# Load shapes from a file
+load my_shapes.json
+```
+
+## File Format
+
+Shapes are saved in JSON format:
+
+```json
+{
+  "version": "1.0",
+  "shape_count": 2,
+  "shapes": [
+    {
+      "type": "point",
+      "id": 1,
+      "x": 10.0,
+      "y": 20.0
+    },
+    {
+      "type": "circle",
+      "id": 2,
+      "center_x": 0.0,
+      "center_y": 0.0,
+      "radius": 5.0
+    }
+  ]
+}
+```
+
 ## Architecture
 
 The project follows a clean, object-oriented architecture:
@@ -129,7 +167,7 @@ The project follows a clean, object-oriented architecture:
 ```bash
 vector_editor/
 ├── models/           # Shape classes (Point, Line, Circle, Square)
-├── services/         # Business logic (ShapeManager)
+├── services/         # Business logic (ShapeManager, FileManager)
 ├── cli/              # Command processing interface
 ├── tests/            # Test suite
 ├── main.py           # Entry point
@@ -140,42 +178,42 @@ vector_editor/
 
 - **Shape**: Abstract base class for all shapes
 - **ShapeManager**: Handles CRUD operations for shapes
+- **FileManager**: Handles file save/load operations
 - **CommandProcessor**: Parses and executes CLI commands
-
-## Examples
-
-### Interactive Session
-
-```bash
-=== Vector Editor CLI ===
-Type 'help' for available commands or 'exit' to quit.
-
-> create point 10 20
-Point created with ID: 1
-
-> create circle 0 0 5
-Circle created with ID: 2
-
-> list
-Created shapes:
-  1: Point(10.0, 20.0)
-  2: Circle(center=(0.0, 0.0), radius=5.0)
-
-> delete 1
-Shape 1 deleted successfully
-
-> list
-Created shapes:
-  2: Circle(center=(0.0, 0.0), radius=5.0)
-
-> exit
-Goodbye!
-```
 
 ## Testing
 
-The code is designed to be easily testable. You can write unit tests for:
+Run the test suite:
+
+```bash
+# Run all tests coverage
+python run_tests.py
+
+# Run only unit tests
+python run_tests.py unit
+
+# Run only integration tests
+python run_tests.py integration
+
+# Run specific test file
+python -m pytest tests/unit/test_shapes.py -v
+```
+
+The project includes comprehensive tests for:
 
 - Shape classes (`models/`)
 - ShapeManager functionality (`services/`)
 - Command processing (`cli/`)
+- File operations (`services/file_manager.py`)
+
+## Development
+
+### Code Quality Tools
+
+The project uses several development tools for code quality:
+
+- **black**: Code formatting
+- **isort**: Import sorting
+- **mypy**: Type checking
+- **flake8**: Linting
+- **pytest**: Testing framework

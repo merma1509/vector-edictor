@@ -86,10 +86,55 @@ class TestCommandProcessorEssential(unittest.TestCase):
         self.assertIn("create", result)
         self.assertIn("delete", result)
         self.assertIn("list", result)
+        self.assertIn("save", result)
+        self.assertIn("load", result)
         
         # Test exit command
         result = self.processor.process_command("exit")
         self.assertEqual(result, "Goodbye!")
+    
+    def test_save_and_load_commands(self):
+        """Test save and load commands functionality"""
+        # Create some shapes first
+        self.processor.process_command("create point 10 20")
+        self.processor.process_command("create circle 0 0 5")
+        
+        # Test save command (should show shapes being saved)
+        result = self.processor.process_command("save test_cli_save.json")
+        self.assertIn("Successfully saved", result)
+        self.assertIn("2 shapes", result)
+        self.assertIn("Point(10.0, 20.0)", result)                      # Should show shapes
+        self.assertIn("Circle(center=(0.0, 0.0), radius=5.0)", result)  # Should show shapes
+        
+        # Clear shapes
+        self.processor.process_command("clear")
+        
+        # Test load command (should show loaded shapes)
+        result = self.processor.process_command("load test_cli_save.json")
+        self.assertIn("Successfully loaded", result)
+        self.assertIn("Point(10.0, 20.0)", result)                      # Should show loaded shapes
+        self.assertIn("Circle(center=(0.0, 0.0), radius=5.0)", result)  # Should show loaded shapes
+        
+        # Clean up
+        import os
+        if os.path.exists("test_cli_save.json"):
+            os.remove("test_cli_save.json")
+    
+    def test_save_load_error_handling(self):
+        """Test save and load error handling"""
+        # Test save without filename
+        result = self.processor.process_command("save")
+        self.assertIn("Error:", result)
+        self.assertIn("filename", result)
+        
+        # Test load without filename
+        result = self.processor.process_command("load")
+        self.assertIn("Error:", result)
+        self.assertIn("filename", result)
+        
+        # Test load non-existent file
+        result = self.processor.process_command("load nonexistent.json")
+        self.assertIn("File not found", result)
 
 
 if __name__ == "__main__":

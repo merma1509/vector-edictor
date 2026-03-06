@@ -36,6 +36,10 @@ class CommandProcessor:
             return self._handle_list()
         elif command == "clear":
             return self._handle_clear()
+        elif command == "save":
+            return self._handle_save(parts[1:])
+        elif command == "load":
+            return self._handle_load(parts[1:])
         else:
             return f"Unknown command: {command}. Type 'help' for available commands."
     
@@ -52,6 +56,8 @@ Available commands:
   delete <id>                 - Delete a shape by ID
   list                        - List all created shapes
   clear                       - Delete all shapes
+  save <filename>             - Save all shapes to a file
+  load <filename>             - Load shapes from a file
   help                        - Show this help message
   exit/quit                   - Exit the program
 
@@ -60,6 +66,8 @@ Examples:
   create line 0 0 5 5
   create circle 0 0 10
   create square 3 3 5
+  save my_shapes.json
+  load my_shapes.json
   delete 1
   list
 """
@@ -171,3 +179,33 @@ Examples:
                 break
             except Exception as e:
                 print(f"Error: {str(e)}")
+    
+    def _handle_save(self, args: List[str]) -> str:
+        """Handle save command"""
+        if not args:
+            return "Error: Please specify a filename. Usage: save <filename>"
+        
+        filename = args[0]
+        
+        # Show what's being saved if there are shapes
+        if self.shape_manager.list_shapes():
+            shapes_list = self._handle_list()
+            result = self.shape_manager.save_shapes(filename)
+            return f"{result}\n\n{shapes_list}"
+        else:
+            return self.shape_manager.save_shapes(filename)
+    
+    def _handle_load(self, args: List[str]) -> str:
+        """Handle load command"""
+        if not args:
+            return "Error: Please specify a filename. Usage: load <filename>"
+        
+        filename = args[0]
+        success, message = self.shape_manager.load_shapes(filename)
+        
+        if success and self.shape_manager.list_shapes():
+            # Show the loaded shapes after successful load
+            shapes_list = self._handle_list()
+            return f"{message}\n\n{shapes_list}"
+        
+        return message
