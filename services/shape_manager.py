@@ -13,6 +13,7 @@ from models.line import Line
 from models.circle import Circle
 from models.square import Square
 from models.oval import Oval
+from models.rectangle import Rectangle
 from .file_manager import FileManager
 
 
@@ -59,6 +60,13 @@ class ShapeManager:
         self.shapes[self.next_id] = oval
         self.next_id += 1
         return oval
+    
+    def create_rectangle(self, x: float, y: float, width: float, height: float) -> Rectangle:
+        """Create a new rectangle"""
+        rectangle = Rectangle(self.next_id, x, y, width, height)
+        self.shapes[self.next_id] = rectangle
+        self.next_id += 1
+        return rectangle
     
     def delete_shape(self, shape_id: int) -> bool:
         """Delete a shape by ID. Returns True if deleted, False if not found"""
@@ -156,5 +164,8 @@ class ShapeManager:
         elif shape_type == 'oval':
             return Oval(shape_id, shape_data['center_x'], shape_data['center_y'], 
                          shape_data['width'], shape_data['height'])
+        elif shape_type == 'rectangle':
+            return Rectangle(shape_id, shape_data['x'], shape_data['y'], 
+                           shape_data['width'], shape_data['height'])
         
         return None

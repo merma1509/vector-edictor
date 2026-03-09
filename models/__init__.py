@@ -6,5 +6,6 @@ from .line import Line
 from .circle import Circle
 from .square import Square
 from .oval import Oval
+from .rectangle import Rectangle
 
-__all__ = ['Shape', 'Point', 'Line', 'Circle', 'Square', 'Oval']
+__all__ = ['Shape', 'Point', 'Line', 'Circle', 'Square', 'Oval', 'Rectangle']

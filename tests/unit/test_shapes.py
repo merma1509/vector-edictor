@@ -13,6 +13,7 @@ from models.line import Line
 from models.circle import Circle
 from models.square import Square
 from models.oval import Oval
+from models.rectangle import Rectangle
 
 
 class TestShapesEssential(unittest.TestCase):
@@ -80,6 +81,20 @@ class TestShapesEssential(unittest.TestCase):
         self.assertAlmostEqual(oval.perimeter(), 31.41592653589793)  # Approximation
         self.assertEqual(str(oval), "Oval(center=(0.0, 0.0), width=8.0, height=6.0)")
         self.assertEqual(oval.to_dict(), {"type": "oval", "id": 1, "center_x": 0.0, "center_y": 0.0, "width": 8.0, "height": 6.0})
+    
+    def test_rectangle_creation_and_basic_properties(self):
+        """Test rectangle creation and basic properties"""
+        rectangle = Rectangle(1, 2.0, 3.0, 10.0, 6.0)
+        
+        self.assertEqual(rectangle.id, 1)
+        self.assertEqual(rectangle.x, 2.0)
+        self.assertEqual(rectangle.y, 3.0)
+        self.assertEqual(rectangle.width, 10.0)
+        self.assertEqual(rectangle.height, 6.0)
+        self.assertEqual(rectangle.area(), 60.0)       # 10 * 6
+        self.assertEqual(rectangle.perimeter(), 32.0)  # 2 * (10 + 6)
+        self.assertEqual(str(rectangle), "Rectangle(top-left=(2.0, 3.0), width=10.0, height=6.0)")
+        self.assertEqual(rectangle.to_dict(), {"type": "rectangle", "id": 1, "x": 2.0, "y": 3.0, "width": 10.0, "height": 6.0})
 
 
 if __name__ == "__main__":

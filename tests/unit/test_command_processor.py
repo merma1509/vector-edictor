@@ -40,9 +40,13 @@ class TestCommandProcessorEssential(unittest.TestCase):
         result = self.processor.process_command("create oval 0 0 8 6")
         self.assertEqual(result, "Oval created with ID: 5")
         
+        # Test rectangle creation
+        result = self.processor.process_command("create rectangle 2 4 10 6")
+        self.assertEqual(result, "Rectangle created with ID: 6")
+        
         # Verify all shapes were created
         shapes = self.processor.shape_manager.list_shapes()
-        self.assertEqual(len(shapes), 5)
+        self.assertEqual(len(shapes), 6)
     
     def test_list_and_delete_commands(self):
         """Test list and delete commands functionality"""

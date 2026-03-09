@@ -53,6 +53,7 @@ Available commands:
     circle <cx> <cy> <r>      - Create a circle (center and radius)
     square <x> <y> <side>     - Create a square (top-left corner and side length)
     oval <cx> <cy> <width> <height> - Create an oval (center and dimensions)
+    rectangle <x> <y> <width> <height> - Create a rectangle (top-left corner and dimensions)
   
   delete <id>                 - Delete a shape by ID
   list                        - List all created shapes
@@ -68,6 +69,7 @@ Examples:
   create circle 0 0 10
   create square 3 3 5
   create oval 0 0 8 6
+  create rectangle 2 4 10 6
   save my_shapes.json
   load my_shapes.json
   delete 1
@@ -124,8 +126,17 @@ Examples:
                 oval = self.shape_manager.create_oval(cx, cy, width, height)
                 return f"Oval created with ID: {oval.id}"
             
+            elif shape_type == "rectangle":
+                if len(args) != 5:
+                    return "Error: Rectangle requires position and dimensions. Usage: create rectangle <x> <y> <width> <height>"
+                x, y, width, height = map(float, args[1:5])
+                if width <= 0 or height <= 0:
+                    return "Error: Width and height must be positive"
+                rectangle = self.shape_manager.create_rectangle(x, y, width, height)
+                return f"Rectangle created with ID: {rectangle.id}"
+            
             else:
-                return f"Error: Unknown shape type '{shape_type}'. Supported types: point, line, circle, square, oval"
+                return f"Error: Unknown shape type '{shape_type}'. Supported types: point, line, circle, square, oval, rectangle"
         
         except ValueError as e:
             return f"Error: Invalid numeric value. {str(e)}"
@@ -212,11 +223,39 @@ Examples:
             return "Error: Please specify a filename. Usage: load <filename>"
         
         filename = args[0]
+        
+        # First, show the JSON file content
+        json_content = self._show_file_content(filename)
+        
+        # Then load the shapes
         success, message = self.shape_manager.load_shapes(filename)
         
         if success and self.shape_manager.list_shapes():
             # Show the loaded shapes after successful load
             shapes_list = self._handle_list()
-            return f"{message}\n\n{shapes_list}"
+            return f"{json_content}\n\n{message}\n\n{shapes_list}"
         
-        return message
+        return f"{json_content}\n\n{message}"
+    
+    def _show_file_content(self, filename: str) -> str:
+        """Show the content of the JSON file"""
+        import json
+        from pathlib import Path
+        
+        file_path = Path(filename)
+        
+        if not file_path.exists():
+            return f"File not found: {file_path}"
+        
+        try:
+            with open(file_path, 'r') as f:
+                file_data = json.load(f)
+            
+            # Format JSON for display
+            json_formatted = json.dumps(file_data, indent=2)
+            return f"Loading from: {file_path}\nFile content:\n{json_formatted}"
+        
+        except json.JSONDecodeError:
+            return f"Invalid JSON format in file: {file_path}"
+        except Exception as e:
+            return f"Error reading file: {file_path} - {str(e)}"
