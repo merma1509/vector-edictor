@@ -1,7 +1,7 @@
 """Essential unit tests for CommandProcessor class"""
 
-import unittest
 import sys
+import unittest
 from pathlib import Path
 
 # Add project root to Python path
@@ -13,79 +13,79 @@ from cli.commands import CommandProcessor
 
 class TestCommandProcessorEssential(unittest.TestCase):
     """Essential test cases for CommandProcessor functionality"""
-    
+
     def setUp(self):
         """Set up test fixtures."""
         self.processor = CommandProcessor()
-    
+
     def test_create_all_shape_types(self):
         """Test creating all shape types via commands"""
         # Test point creation
         result = self.processor.process_command("create point 10 20")
         self.assertEqual(result, "Point created with ID: 1")
-        
+
         # Test circle creation
         result = self.processor.process_command("create circle 0 0 5")
         self.assertEqual(result, "Circle created with ID: 2")
-        
+
         # Test line creation
         result = self.processor.process_command("create line 0 0 3 4")
         self.assertEqual(result, "Line created with ID: 3")
-        
+
         # Test square creation
         result = self.processor.process_command("create square 2 3 4")
         self.assertEqual(result, "Square created with ID: 4")
-        
+
         # Test oval creation
         result = self.processor.process_command("create oval 0 0 8 6")
         self.assertEqual(result, "Oval created with ID: 5")
-        
+
         # Test rectangle creation
         result = self.processor.process_command("create rectangle 2 4 10 6")
         self.assertEqual(result, "Rectangle created with ID: 6")
-        
+
         # Verify all shapes were created
         shapes = self.processor.shape_manager.list_shapes()
         self.assertEqual(len(shapes), 6)
-    
+
     def test_list_and_delete_commands(self):
         """Test list and delete commands functionality"""
         # Create some shapes first
         self.processor.process_command("create point 10 20")
         self.processor.process_command("create circle 0 0 5")
-        
+
         # Test list command
         result = self.processor.process_command("list")
         self.assertIn("Point(10.0, 20.0)", result)
         self.assertIn("Circle(center=(0.0, 0.0), radius=5.0)", result)
-        
+
         # Test delete command
         result = self.processor.process_command("delete 1")
         self.assertEqual(result, "Shape 1 deleted successfully")
-        
+
         # Verify deletion
         shapes = self.processor.shape_manager.list_shapes()
         self.assertEqual(len(shapes), 1)
         self.assertEqual(shapes[0].id, 2)
-    
+
     def test_error_handling_for_invalid_commands(self):
         """Test error handling for various invalid commands"""
         # Test invalid create command (missing arguments)
         result = self.processor.process_command("create point")
         self.assertIn("Error:", result)
-        
+
         # Test invalid shape type
         result = self.processor.process_command("create triangle 0 0 1 1 1")
         self.assertIn("Error:", result)
-        
+
         # Test invalid delete (non-existent ID)
         result = self.processor.process_command("delete 999")
         self.assertIn("Error:", result)
-        
+
         # Test unknown command
         result = self.processor.process_command("unknown_command")
         self.assertIn("Unknown command", result)  # Check for actual error message
-    
+
     def test_help_and_exit_commands(self):
         """Test help and exit commands functionality"""
         # Test help command
@@ -96,50 +96,55 @@ class TestCommandProcessorEssential(unittest.TestCase):
         self.assertIn("list", result)
         self.assertIn("save", result)
         self.assertIn("load", result)
-        
+
         # Test exit command
         result = self.processor.process_command("exit")
         self.assertEqual(result, "Goodbye!")
-    
+
     def test_save_and_load_commands(self):
         """Test save and load commands functionality"""
         # Create some shapes first
         self.processor.process_command("create point 10 20")
         self.processor.process_command("create circle 0 0 5")
-        
+
         # Test save command (should show shapes being saved)
         result = self.processor.process_command("save test_cli_save.json")
         self.assertIn("Successfully saved", result)
         self.assertIn("2 shapes", result)
-        self.assertIn("Point(10.0, 20.0)", result)                      # Should show shapes
-        self.assertIn("Circle(center=(0.0, 0.0), radius=5.0)", result)  # Should show shapes
-        
+        self.assertIn("Point(10.0, 20.0)", result)  # Should show shapes
+        self.assertIn(
+            "Circle(center=(0.0, 0.0), radius=5.0)", result
+        )  # Should show shapes
+
         # Clear shapes
         self.processor.process_command("clear")
-        
+
         # Test load command (should show loaded shapes)
         result = self.processor.process_command("load test_cli_save.json")
         self.assertIn("Successfully loaded", result)
-        self.assertIn("Point(10.0, 20.0)", result)                      # Should show loaded shapes
-        self.assertIn("Circle(center=(0.0, 0.0), radius=5.0)", result)  # Should show loaded shapes
-        
+        self.assertIn("Point(10.0, 20.0)", result)  # Should show loaded shapes
+        self.assertIn(
+            "Circle(center=(0.0, 0.0), radius=5.0)", result
+        )  # Should show loaded shapes
+
         # Clean up
         import os
+
         if os.path.exists("test_cli_save.json"):
             os.remove("test_cli_save.json")
-    
+
     def test_save_load_error_handling(self):
         """Test save and load error handling"""
         # Test save without filename
         result = self.processor.process_command("save")
         self.assertIn("Error:", result)
         self.assertIn("filename", result)
-        
+
         # Test load without filename
         result = self.processor.process_command("load")
         self.assertIn("Error:", result)
         self.assertIn("filename", result)
-        
+
         # Test load non-existent file
         result = self.processor.process_command("load nonexistent.json")
         self.assertIn("File not found", result)

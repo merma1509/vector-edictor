@@ -1,11 +1,11 @@
 """Vector editor models package"""
 
-from .shape import Shape
-from .point import Point
-from .line import Line
 from .circle import Circle
-from .square import Square
+from .line import Line
 from .oval import Oval
+from .point import Point
 from .rectangle import Rectangle
+from .shape import Shape
+from .square import Square
 
-__all__ = ['Shape', 'Point', 'Line', 'Circle', 'Square', 'Oval', 'Rectangle']
+__all__ = ["Shape", "Point", "Line", "Circle", "Square", "Oval", "Rectangle"]

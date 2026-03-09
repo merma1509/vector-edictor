@@ -2,4 +2,4 @@
 
 from .commands import CommandProcessor
 
-__all__ = ['CommandProcessor']
+__all__ = ["CommandProcessor"]

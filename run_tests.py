@@ -1,8 +1,8 @@
 """Test runner for the vector editor project"""
 
-import unittest
+import subprocess
 import sys
-import os
+import unittest
 from pathlib import Path
 
 # Add project root to Python path
@@ -13,46 +13,46 @@ sys.path.insert(0, str(project_root))
 def run_all_tests():
     """Run all tests in the tests directory"""
     # Import essential test modules directly
-    import tests.unit.test_shapes
-    import tests.unit.test_shape_manager
-    import tests.unit.test_command_processor
     import tests.integration.test_cli_workflow
-    
+    import tests.unit.test_command_processor
+    import tests.unit.test_shape_manager
+    import tests.unit.test_shapes
+
     # Create test suite
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
-    
+
     # Add all essential test cases
     suite.addTests(loader.loadTestsFromModule(tests.unit.test_shapes))
     suite.addTests(loader.loadTestsFromModule(tests.unit.test_shape_manager))
     suite.addTests(loader.loadTestsFromModule(tests.unit.test_command_processor))
     suite.addTests(loader.loadTestsFromModule(tests.integration.test_cli_workflow))
-    
+
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
-    
+
     return result.wasSuccessful()
 
 
 def run_unit_tests():
     """Run only essential unit tests"""
     # Import essential test modules directly
-    import tests.unit.test_shapes
-    import tests.unit.test_shape_manager
     import tests.unit.test_command_processor
-    
+    import tests.unit.test_shape_manager
+    import tests.unit.test_shapes
+
     # Create test suite
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
-    
+
     # Add essential unit test cases
     suite.addTests(loader.loadTestsFromModule(tests.unit.test_shapes))
     suite.addTests(loader.loadTestsFromModule(tests.unit.test_shape_manager))
     suite.addTests(loader.loadTestsFromModule(tests.unit.test_command_processor))
-    
+
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
-    
+
     return result.wasSuccessful()
 
 
@@ -60,17 +60,17 @@ def run_integration_tests():
     """Run only integration tests"""
     # Import test modules directly
     import tests.integration.test_cli_workflow
-    
+
     # Create test suite
     loader = unittest.TestLoader()
     suite = unittest.TestSuite()
-    
+
     # Add integration test cases
     suite.addTests(loader.loadTestsFromModule(tests.integration.test_cli_workflow))
-    
+
     runner = unittest.TextTestRunner(verbosity=2)
     result = runner.run(suite)
-    
+
     return result.wasSuccessful()
 
 
@@ -78,7 +78,7 @@ def main():
     """Main test runner"""
     if len(sys.argv) > 1:
         test_type = sys.argv[1].lower()
-        
+
         if test_type == "unit":
             success = run_unit_tests()
         elif test_type == "integration":
@@ -90,7 +90,7 @@ def main():
     else:
         print("Running all tests...")
         success = run_all_tests()
-    
+
     sys.exit(0 if success else 1)
 
 

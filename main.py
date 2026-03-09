@@ -1,6 +1,7 @@
 """Main entry point for the Vector Editor CLI application"""
 
 import sys
+
 from cli.commands import CommandProcessor
 
 
