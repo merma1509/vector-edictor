@@ -52,6 +52,7 @@ Available commands:
     line <x1> <y1> <x2> <y2>  - Create a line segment
     circle <cx> <cy> <r>      - Create a circle (center and radius)
     square <x> <y> <side>     - Create a square (top-left corner and side length)
+    oval <cx> <cy> <width> <height> - Create an oval (center and dimensions)
   
   delete <id>                 - Delete a shape by ID
   list                        - List all created shapes
@@ -66,6 +67,7 @@ Examples:
   create line 0 0 5 5
   create circle 0 0 10
   create square 3 3 5
+  create oval 0 0 8 6
   save my_shapes.json
   load my_shapes.json
   delete 1
@@ -113,8 +115,17 @@ Examples:
                 square = self.shape_manager.create_square(x, y, side)
                 return f"Square created with ID: {square.id}"
             
+            elif shape_type == "oval":
+                if len(args) != 5:
+                    return "Error: Oval requires center and dimensions. Usage: create oval <cx> <cy> <width> <height>"
+                cx, cy, width, height = map(float, args[1:5])
+                if width <= 0 or height <= 0:
+                    return "Error: Width and height must be positive"
+                oval = self.shape_manager.create_oval(cx, cy, width, height)
+                return f"Oval created with ID: {oval.id}"
+            
             else:
-                return f"Error: Unknown shape type '{shape_type}'. Supported types: point, line, circle, square"
+                return f"Error: Unknown shape type '{shape_type}'. Supported types: point, line, circle, square, oval"
         
         except ValueError as e:
             return f"Error: Invalid numeric value. {str(e)}"

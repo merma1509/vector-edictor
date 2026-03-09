@@ -1,18 +1,21 @@
-"""Essential unit tests for ShapeManager class"""
+"""Unit tests for ShapeManager class"""
 
 import unittest
 import sys
+import os
 from pathlib import Path
 
 # Add project root to Python path
 project_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(project_root))
 
-from services.shape_manager import ShapeManager
+from models.shape import Shape
 from models.point import Point
-from models.circle import Circle
 from models.line import Line
+from models.circle import Circle
 from models.square import Square
+from models.oval import Oval
+from services.shape_manager import ShapeManager
 
 
 class TestShapeManagerEssential(unittest.TestCase):
@@ -28,20 +31,23 @@ class TestShapeManagerEssential(unittest.TestCase):
         circle = self.manager.create_circle(0.0, 0.0, 5.0)
         line = self.manager.create_line(0.0, 0.0, 3.0, 4.0)
         square = self.manager.create_square(2.0, 3.0, 4.0)
+        oval = self.manager.create_oval(0.0, 0.0, 8.0, 6.0)
         
         # Verify all shapes were created with correct IDs
         self.assertEqual(point.id, 1)
         self.assertEqual(circle.id, 2)
         self.assertEqual(line.id, 3)
         self.assertEqual(square.id, 4)
+        self.assertEqual(oval.id, 5)
         
         # Verify shapes are stored correctly
         shapes = self.manager.list_shapes()
-        self.assertEqual(len(shapes), 4)
+        self.assertEqual(len(shapes), 5)
         self.assertIsInstance(shapes[0], Point)
         self.assertIsInstance(shapes[1], Circle)
         self.assertIsInstance(shapes[2], Line)
         self.assertIsInstance(shapes[3], Square)
+        self.assertIsInstance(shapes[4], Oval)
     
     def test_delete_existing_and_nonexisting_shapes(self):
         """Test delete functionality for existing and non-existing shapes"""

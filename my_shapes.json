@@ -3,25 +3,26 @@
   "shape_count": 4,
   "shapes": [
     {
-      "type": "point",
+      "type": "oval",
       "id": 1,
+      "center_x": 0.0,
+      "center_y": 0.0,
+      "width": 8.0,
+      "height": 6.0
+    },
+    {
+      "type": "point",
+      "id": 2,
       "x": 10.0,
       "y": 20.0
     },
     {
       "type": "line",
-      "id": 2,
+      "id": 3,
       "x1": 0.0,
       "y1": 0.0,
       "x2": 5.0,
       "y2": 5.0
-    },
-    {
-      "type": "circle",
-      "id": 3,
-      "center_x": 0.0,
-      "center_y": 0.0,
-      "radius": 10.0
     },
     {
       "type": "square",

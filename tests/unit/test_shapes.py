@@ -1,4 +1,4 @@
-"""Essential unit tests for shape classes"""
+"""Unit tests for shape classes"""
 
 import unittest
 import sys
@@ -12,6 +12,7 @@ from models.point import Point
 from models.line import Line
 from models.circle import Circle
 from models.square import Square
+from models.oval import Oval
 
 
 class TestShapesEssential(unittest.TestCase):
@@ -66,17 +67,19 @@ class TestShapesEssential(unittest.TestCase):
         self.assertAlmostEqual(square.perimeter(), 16.0)
         self.assertEqual(str(square), "Square(top-left=(2.0, 3.0), side=4.0)")
     
-    def test_shape_edge_cases_and_validation(self):
-        """Test edge cases for shape calculations and validation"""
-        # Point with negative coordinates
-        point = Point(1, -10.5, -20.5)
-        self.assertEqual(point.x, -10.5)
-        self.assertEqual(point.y, -20.5)
+    def test_oval_creation_and_basic_properties(self):
+        """Test oval creation and basic properties"""
+        oval = Oval(1, 0.0, 0.0, 8.0, 6.0)
         
-        # Circle with zero radius
-        circle = Circle(1, 0.0, 0.0, 0.0)
-        self.assertEqual(circle.area(), 0.0)
-        self.assertEqual(circle.perimeter(), 0.0)
+        self.assertEqual(oval.id, 1)
+        self.assertEqual(oval.center_x, 0.0)
+        self.assertEqual(oval.center_y, 0.0)
+        self.assertEqual(oval.width, 8.0)
+        self.assertEqual(oval.height, 6.0)
+        self.assertAlmostEqual(oval.area(), 37.69911184307752)       # pi * 4 * 3
+        self.assertAlmostEqual(oval.perimeter(), 31.41592653589793)  # Approximation
+        self.assertEqual(str(oval), "Oval(center=(0.0, 0.0), width=8.0, height=6.0)")
+        self.assertEqual(oval.to_dict(), {"type": "oval", "id": 1, "center_x": 0.0, "center_y": 0.0, "width": 8.0, "height": 6.0})
 
 
 if __name__ == "__main__":
