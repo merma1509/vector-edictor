@@ -1,137 +1,65 @@
 # Vector Editor CLI
 
-A simple command-line vector editor for creating and managing geometric shapes with file persistence.
+A professional command-line vector editor for creating and managing geometric shapes with file persistence.
 
 ## Features
 
-- **Create shapes**: Point, Line segment, Circle, Square
-- **File operations**: Save and load shapes to/from JSON files
-- **Delete shapes**: Remove shapes by ID
-- **List shapes**: View all created shapes
-- **Interactive mode**: User-friendly CLI interface
-- **Error handling**: Comprehensive input validation
-- **Zero runtime dependencies**: Uses only Python standard library
+- **6 Shape Types**: Point, Line, Circle, Square, Oval, Rectangle
+- **File Operations**: Save and load shapes to/from JSON files
+- **Enhanced CLI**: User-friendly commands with comprehensive help
+- **Error Handling**: Robust input validation and error messages
+- **Zero Dependencies**: Uses only Python standard library
 
-## Installation
-
-### Prerequisites
-
-- Python 3.7+ (recommended 3.11)
-- uv (modern Python package manager) - optional but recommended
-
-### Setup with uv (Recommended)
-
-1. **Install uv** (if not already installed):
+## Quick Start
 
 ```bash
-# Windows (PowerShell)
-powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
-   
-# macOS/Linux
-curl -LsSf https://astral.sh/uv/install.sh | sh
-```
+# Clone and setup
+git clone https://github.com/merma1509/vector-edictor.git
+cd vector-edictor
+python -m venv .venv
+source .venv/bin/activate  # Linux/Mac
+.venv\Scripts\activate     # Windows
 
-2.**Clone and setup the project**:
-
-```bash
-git clone <repository-url>
-cd vector-editor
-   
-# Create virtual environment
-uv venv
-   
-# Activate environment
-# Windows
-.venv\Scripts\activate
-# macOS/Linux
-source .venv/bin/activate
-   
-# Install dependencies
-uv pip install -r requirements.txt
-```
-
-### Setup with Python venv (Traditional)
-
-1. **Clone and setup the project**:
-
-```bash
-git clone <repository-url>
-cd vector-editor
-   
-# Create virtual environment
-python -m venv venv
-   
-# Activate environment
-# Windows
-venv\Scripts\activate
-# macOS/Linux
-source venv/bin/activate
-   
-# Install dependencies
-pip install -r requirements.txt
+# Run the CLI
+python main.py
 ```
 
 ## Usage
 
-### Interactive Mode
-
+### Creating Shapes
 ```bash
-python main.py
-```
-
-### Command Line Mode
-
-```bash
-python main.py create point 10 20
-python main.py list
-python main.py delete 1
-```
-
-## Commands
-
-### Create Shapes
-
-```bash
-# Create a point at coordinates (10, 20)
 create point 10 20
-
-# Create a line from (0, 0) to (5, 5)
 create line 0 0 5 5
-
-# Create a circle with center (0, 0) and radius 10
 create circle 0 0 10
-
-# Create a square with top-left corner (3, 3) and side length 5
 create square 3 3 5
-```
-
-### Manage Shapes
-
-```bash
-# List all created shapes
-list
-
-# Delete shape with ID 1
-delete 1
-
-# Delete all shapes
-clear
-
-# Show help
-help
-
-# Exit the program
-exit
+create oval 0 0 8 6
+create rectangle 2 4 10 6
 ```
 
 ### File Operations
-
 ```bash
-# Save all shapes to a file
-save my_shapes.json
+save my_shapes.json      # Save shapes with preview
+load my_shapes.json      # Load shapes with JSON display
+```
 
-# Load shapes from a file
-load my_shapes.json
+### Shape Management
+```bash
+list                    # Show all shapes
+delete 1                # Delete shape by ID
+clear                   # Delete all shapes
+help                    # Show help
+exit                    # Exit program
+```
+
+## Architecture
+
+```
+vector-edictor/
+├── models/           # Shape classes (Point, Line, Circle, Square, Oval, Rectangle)
+├── services/         # Business logic (ShapeManager, FileManager)
+├── cli/             # Command-line interface (CommandProcessor)
+├── tests/           # Comprehensive test suite
+└── main.py          # Application entry point
 ```
 
 ## File Format
@@ -144,10 +72,12 @@ Shapes are saved in JSON format:
   "shape_count": 2,
   "shapes": [
     {
-      "type": "point",
+      "type": "rectangle",
       "id": 1,
-      "x": 10.0,
-      "y": 20.0
+      "x": 2.0,
+      "y": 4.0,
+      "width": 10.0,
+      "height": 6.0
     },
     {
       "type": "circle",
@@ -160,60 +90,45 @@ Shapes are saved in JSON format:
 }
 ```
 
-## Architecture
-
-The project follows a clean, object-oriented architecture:
-
-```bash
-vector_editor/
-├── models/           # Shape classes (Point, Line, Circle, Square)
-├── services/         # Business logic (ShapeManager, FileManager)
-├── cli/              # Command processing interface
-├── tests/            # Test suite
-├── main.py           # Entry point
-└── README.md         # Documentation
-```
-
-### Key Components
-
-- **Shape**: Abstract base class for all shapes
-- **ShapeManager**: Handles CRUD operations for shapes
-- **FileManager**: Handles file save/load operations
-- **CommandProcessor**: Parses and executes CLI commands
-
 ## Testing
 
-Run the test suite:
+Run the comprehensive test suite:
 
 ```bash
-# Run all tests coverage
-python run_tests.py
-
-# Run only unit tests
-python run_tests.py unit
-
-# Run only integration tests
-python run_tests.py integration
-
-# Run specific test file
-python -m pytest tests/unit/test_shapes.py -v
+python run_tests.py          # Run all tests
+python run_tests.py unit    # Run unit tests only
+python run_tests.py integration  # Run integration tests only
 ```
 
-The project includes comprehensive tests for:
-
-- Shape classes (`models/`)
-- ShapeManager functionality (`services/`)
-- Command processing (`cli/`)
-- File operations (`services/file_manager.py`)
+**Coverage**: 25 tests covering all functionality
+- Shape classes: Properties, calculations, serialization
+- ShapeManager: CRUD operations, file persistence
+- CommandProcessor: CLI commands, error handling
+- Integration: End-to-end workflows
 
 ## Development
 
-### Code Quality Tools
+```bash
+# Code formatting
+black .
+isort .
 
-The project uses several development tools for code quality:
+# Type checking
+mypy .
 
-- **black**: Code formatting
-- **isort**: Import sorting
-- **mypy**: Type checking
-- **flake8**: Linting
-- **pytest**: Testing framework
+# Linting
+flake8 .
+
+# Testing with coverage
+pytest --cov=. tests/
+```
+
+## License
+
+MIT License - feel free to use and modify.
+
+---
+
+**Version**: 1.0.0  
+**Python**: 3.8+  
+**Dependencies**: None (standard library only)

@@ -34,3 +34,6 @@ htmlcov/
 *.tmp
 temp/
 tmp/
+
+# JSON files
+*.json
