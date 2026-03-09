@@ -9,9 +9,7 @@ from .shape import Shape
 class Circle(Shape):
     """Represents a circle with center and radius"""
 
-    def __init__(
-        self, id: int, center_x: float, center_y: float, radius: float
-    ):
+    def __init__(self, id: int, center_x: float, center_y: float, radius: float):
         super().__init__(id)
         self.center_x = center_x
         self.center_y = center_y
@@ -38,5 +36,6 @@ class Circle(Shape):
     def __str__(self) -> str:
         """String representation of circle"""
         return (
-            f"Circle(center=({self.center_x}, {self.center_y}), radius={self.radius})"
+            f"Circle(center=({self.center_x}, {self.center_y}), "
+            f"radius={self.radius})"
         )

@@ -138,7 +138,7 @@ class ShapeManager:
                     # Update next_id to be higher than any loaded shape
                     if shape.id >= self.next_id:
                         self.next_id = shape.id + 1
-            except Exception as e:
+            except Exception:
                 # Skip invalid shapes but continue loading others
                 continue
 

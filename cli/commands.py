@@ -41,7 +41,7 @@ class CommandProcessor:
         elif command == "load":
             return self._handle_load(parts[1:])
         else:
-            return f"Unknown command: {command}. Type 'help' for available commands."
+            return f"Unknown command: {command}. Type 'help' for commands."
 
     def _show_help(self) -> str:
         """Show help information"""
@@ -51,10 +51,9 @@ Available commands:
     point <x> <y>             - Create a point
     line <x1> <y1> <x2> <y2>  - Create a line segment
     circle <cx> <cy> <r>      - Create a circle (center and radius)
-    square <x> <y> <side>     - Create a square (top-left corner and side length)
-    oval <cx> <cy> <w> <h>    - Create an oval (center and dimensions)
-    rectangle <x> <y> <w> <h>  - Create a rectangle (top-left corner and dimensions)
-  
+    square <x> <y> <side>     - Create square (top-left, side length)
+    oval <cx> <cy> <w> <h>    - Create oval (center and dimensions)
+    rectangle <x> <y> <w> <h>  - Create rectangle (top-left, dimensions)
   delete <id>                 - Delete a shape by ID
   list                        - List all created shapes
   clear                       - Delete all shapes
@@ -87,7 +86,7 @@ Examples:
         try:
             if shape_type == "point":
                 if len(args) != 3:
-                    return "Error: Point requires 2 coordinates. Usage: create point <x> <y>"
+                    return "Error: Point needs 2 coords. Usage: create point <x> <y>"
                 x, y = float(args[1]), float(args[2])
                 point = self.shape_manager.create_point(x, y)
                 return f"Point created with ID: {point.id}"

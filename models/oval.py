@@ -41,7 +41,10 @@ class Oval(Shape):
 
     def __str__(self) -> str:
         """String representation of oval"""
-        return f"Oval(center=({self.center_x}, {self.center_y}), width={self.width}, height={self.height})"
+        return (
+            f"Oval(center=({self.center_x}, {self.center_y}), "
+            f"width={self.width}, height={self.height})"
+        )
 
     def to_dict(self) -> dict:
         """Convert oval to dictionary for serialization"""

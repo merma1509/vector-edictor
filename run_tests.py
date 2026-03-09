@@ -1,6 +1,5 @@
 """Test runner for the vector editor project"""
 
-import subprocess
 import sys
 import unittest
 from pathlib import Path
